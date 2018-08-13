@@ -20,6 +20,10 @@ def send_rf_command(channel, is_study = False):
     data += rf_channel_list[channel]
 
     data += "\xFF"
-    
+
     ser.write(data)
+
+    ser.flushInput()
+    ser.flushOutput()
+
     ser.close()
