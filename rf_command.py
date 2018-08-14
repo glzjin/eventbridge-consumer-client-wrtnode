@@ -1,7 +1,7 @@
 import serial
 import struct
 
-rf_channel_list = ["\x01", "\x02", "\x03", "\x04"]
+rf_channel_list = [b"\x01", b"\x02", b"\x03", b"\x04"]
 
 def send_rf_command(channel, is_study = False):
     ser = serial.Serial(
@@ -12,14 +12,17 @@ def send_rf_command(channel, is_study = False):
         bytesize = serial.EIGHTBITS
     )
 
+    ser.flushInput()
+    ser.flushOutput()
+
     if is_study:
-        data = "\xAA"
+        data = b"\xAA"
     else:
-        data = "\xBB"
+        data = b"\xBB"
 
     data += rf_channel_list[channel]
 
-    data += "\xFF"
+    data += b"\xFF"
 
     ser.write(data)
 
