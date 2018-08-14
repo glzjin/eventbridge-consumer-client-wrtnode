@@ -29,6 +29,8 @@ class Config:
     url = "http://eb.zhaoj.in"
     #消费者角色的 Key
     consumer_key = "123"
+    #消费者角色的 UUID
+    consumer_uuid = "uuid"
     #事件表
     event_list = {1: key1_press, 2: key2_press, \
                 3: key3_press, 4: key4_press, \

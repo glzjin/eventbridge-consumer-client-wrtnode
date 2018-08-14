@@ -5,7 +5,7 @@ from config import Config
 
 def get_event():
     try:
-        response = requests.get(Config.url + "/consumer/event", params = {"key": Config.consumer_key})
+        response = requests.get(Config.url + "/consumer/" + Config.consumer_uuid + "/event", params = {"key": Config.consumer_key})
         data = response.json()
         if data['code'] == 100:
             new_event = Event(data['data']['event']['event_id'])
