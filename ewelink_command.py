@@ -9,9 +9,19 @@ import ssl
 class Ewelink(websocket.WebSocketApp):
     data = None
 
+    def __init__(self, config_class, access_token = ''):
+        self.config_class = config_class
+        self.get_ewelink_device_info()
+        super(Ewelink, self).__init__("wss://cn-long.coolkit.cc:8080/api/ws")
+        self.ws_init()
+
+    def __del__(self):
+        self.close_api_ws()
+        super(Ewelink, self).__del__()
+
     def ws_run(self):
         self.running = True
-        while running:
+        while self.running:
             try:
                 self.run_forever(sslopt = {"cert_reqs": ssl.CERT_NONE}, ping_interval = 110)
             except KeyboardInterrupt:
@@ -22,18 +32,8 @@ class Ewelink(websocket.WebSocketApp):
         self.thread = threading.Thread(target = self.ws_run)
         self.thread.start()
 
-    def __init__(self, config_class):
-        super(Ewelink, self).__init__("wss://cn-long.coolkit.cc:8080/api/ws")
-        self.config_class = config_class
-        self.get_ewelink_device_info()
-        self.ws_init()
-
-    def __del__(self):
-        self.close_api_ws()
-
     def close_api_ws(self):
         self.running = False
-        self.close()
 
     def on_error(self, error):
         logging.error(error)
@@ -43,7 +43,7 @@ class Ewelink(websocket.WebSocketApp):
         self.send(json.dumps({"action": "userOnline", "version": 6, "imei": "1234567890", \
                                 "ts": int(millisecond_unix_timestamp / 1000), "model": "iphone6", "os": "ios", "romVersion": "9", \
                                 "at": self.config_class.access_token, "userAgent": "app", "apikey": self.config_class.api_key, \
-                                "appid" : "EMasBJoZukhIA5STUb18ZrDG6jCBMkuu", "nonce": "2moes82f", "sequence":int(millisecond_unix_timestamp), "apkVesrion": "1.8"}))
+                                "appid" : "oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq", "nonce": "2moes82f", "sequence":int(millisecond_unix_timestamp), "apkVesrion": "1.8"}))
 
     def get_ewelink_device_info(self):
         if self.data is not None:
