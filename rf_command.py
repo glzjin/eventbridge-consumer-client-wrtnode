@@ -3,9 +3,9 @@ import struct
 
 rf_channel_list = [b"\x01", b"\x02", b"\x03", b"\x04"]
 
-def send_rf_command(channel, is_study = False):
+def send_rf_command(config_class, channel, is_study = False):
     ser = serial.Serial(
-        port = '/dev/ttyUSB0',
+        port = config_class.tty,
         baudrate = 9600,
         parity = serial.PARITY_NONE,
         stopbits = serial.STOPBITS_ONE,

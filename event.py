@@ -1,4 +1,5 @@
-import event_consume
+import logging
+from config import Config
 
 class Event:
     event_id = 0
@@ -6,4 +7,6 @@ class Event:
         self.event_id = event_id
 
     def consume(self):
-        event_consume.event_consume(self.event_id)
+        if self.event_id in Config.event_list:
+            logging.info("Found event ID " + str(self.event_id) + "!")
+            Config.event_list[self.event_id]()
