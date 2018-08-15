@@ -28,40 +28,25 @@ def on_message(ws, message):
 
         logging.info("Event ID:" + str(new_event.event_id) + " Consumed!")
 
-def keep_alive():
-    logging.info("Main Keep Alive!")
-    ws.send(json.dumps({'action': 'ping'}))
-
-    # 保活定时器
-    global t
-    t = threading.Timer(60, keep_alive)
-    t.start()
-
-def on_close(ws):
-    logging.info( "### closed ###")
-
 def on_open(ws):
     # 注册
     ws.send(json.dumps({'action': 'reg', 'consumer_uuid': Config.consumer_uuid, 'key': Config.consumer_key}))
 
-    # 连接保活
-    keep_alive()
-
-
 if __name__ == "__main__":
-    try:
-        logging.info("Booted!")
-        # websocket.enableTrace(True)
-        ws = websocket.WebSocketApp("ws://eb.zhaoj.in/consumer/websocket",
-                                  on_message = on_message,
-                                  on_close = on_close)
-        ws.on_open = on_open
-        ws.run_forever()
-    except KeyboardInterrupt:
-        logging.info("Exiting!")
-        t.cancel()
-        ws.close()
-        sys.exit(1)
+    logging.info("Booted!")
+    # websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("ws://eb.zhaoj.in/consumer/websocket",
+                              on_message = on_message)
+    ws.on_open = on_open
+    running = True
+    while running:
+        try:
+            ws.run_forever(ping_interval = 60)
+        except KeyboardInterrupt:
+            running = False
+            logging.info("Exiting!")
+            ws.close()
+            sys.exit(1)
 
 
 
