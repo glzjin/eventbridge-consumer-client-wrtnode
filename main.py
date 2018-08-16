@@ -41,7 +41,7 @@ if __name__ == "__main__":
     running = True
     while running:
         try:
-            ws.run_forever(ping_interval = 60)
+            ws.run_forever(ping_interval = 10, ping_timeout = 3)
         except KeyboardInterrupt:
             running = False
             logging.info("Exiting!")

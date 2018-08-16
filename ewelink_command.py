@@ -23,7 +23,7 @@ class Ewelink(websocket.WebSocketApp):
         self.running = True
         while self.running:
             try:
-                self.run_forever(sslopt = {"cert_reqs": ssl.CERT_NONE}, ping_interval = 10)
+                self.run_forever(sslopt = {"cert_reqs": ssl.CERT_NONE}, ping_interval = 10, ping_timeout = 3)
             except KeyboardInterrupt:
                 self.running = False
                 self.close()
