@@ -23,7 +23,7 @@ class Ewelink(websocket.WebSocketApp):
         self.running = True
         while self.running:
             try:
-                self.run_forever(sslopt = {"cert_reqs": ssl.CERT_NONE}, ping_interval = 110)
+                self.run_forever(sslopt = {"cert_reqs": ssl.CERT_NONE}, ping_interval = 10)
             except KeyboardInterrupt:
                 self.running = False
                 self.close()
@@ -37,6 +37,15 @@ class Ewelink(websocket.WebSocketApp):
 
     def on_error(self, error):
         logging.error(error)
+
+    def on_message(self, message):
+        data = json.loads(message)
+
+        if 'deviceid' in data:
+            if data['deviceid'] == self.config_class.device_id:
+                if 'params' in data:
+                    if 'switches' in data['params']:
+                        self.data = data['params']['switches']
 
     def on_open(self):
         millisecond_unix_timestamp = time.time() * 1000
